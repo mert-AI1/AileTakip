@@ -3,159 +3,147 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#09090d">
+<meta name="theme-color" content="#08090d">
 <title>AileTakip</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<!-- ================= SPLASH ================= -->
-
+<!-- SPLASH -->
 <div id="splash">
+  <div class="splash-inner">
 
-  <div class="splash-content">
-
-    <div class="brand-logo logo-large" aria-label="AileTakip">
-
+    <div class="brand-logo logo-large">
       <div class="person person-pink"></div>
       <div class="person person-black"></div>
-
       <div class="logo-heart"></div>
-
     </div>
 
-    <div class="splash-name">
+    <div class="splash-title">
       Aile<span>Takip</span>
+    </div>
+
+    <div class="splash-sub">
+      AİLENİZLE GÜVENLİ BAĞLANTI
     </div>
 
     <div class="loading-line">
       <div id="loadingBar"></div>
     </div>
 
-    <div class="loading-text">
-      Güvenli bağlantı kuruluyor
-    </div>
+    <div class="loading-text">Güvenli sistem başlatılıyor</div>
 
   </div>
-
 </div>
 
 
-<!-- ================= ANA SİTE ================= -->
-
+<!-- SITE -->
 <div id="site">
 
 <header>
 
   <div class="brand">
-
     <div class="brand-logo logo-small">
-
       <div class="person person-pink"></div>
       <div class="person person-black"></div>
-
       <div class="logo-heart"></div>
-
     </div>
 
-    <div>
+    <div class="brand-text">
       <b>Aile<span>Takip</span></b>
-      <small>Ailenizle güvenli bağlantı</small>
+      <small>Güvenli aile ağı</small>
     </div>
-
   </div>
 
-  <nav>
-    <a href="#map">Harita</a>
-    <a href="#family">Ailem</a>
-    <a href="#history">Geçmiş</a>
-  </nav>
+  <div class="top-status">
+    <span></span> Sistem aktif
+  </div>
 
-  <button id="logout">Çıkış</button>
+  <button id="logout" class="logout-btn">
+    Çıkış
+  </button>
 
 </header>
 
 
 <main>
 
-<!-- ================= GİRİŞ ================= -->
-
+<!-- GİRİŞ -->
 <section id="auth">
 
-  <div class="auth-background-glow glow-one"></div>
-  <div class="auth-background-glow glow-two"></div>
+  <div class="background-orb orb-one"></div>
+  <div class="background-orb orb-two"></div>
+  <div class="background-orb orb-three"></div>
 
   <div class="auth-layout">
 
     <div class="welcome">
 
-      <div class="mini-logo">
-
+      <div class="welcome-logo">
         <div class="brand-logo logo-medium">
-
           <div class="person person-pink"></div>
           <div class="person person-black"></div>
-
           <div class="logo-heart"></div>
-
         </div>
-
       </div>
 
-      <small class="eyebrow">AİLETAKİP</small>
+      <div class="eyebrow">AİLETAKİP</div>
 
       <h1>
-        Ailenizle<br>
-        <em>bağlantıda</em> kalın.
+        Aileniz<br>
+        <span>her zaman</span><br>
+        bağlantıda.
       </h1>
 
       <p>
-        Sevdiklerinizin konumunu, aile bağlantılarınızı
-        ve güvenli paylaşımınızı tek bir merkezden yönetin.
+        Aile üyelerinizle güvenli bağlantı kurun,
+        konum paylaşımını yönetin ve aile ağınızı
+        tek bir merkezden takip edin.
       </p>
 
-      <div class="security-note">
-        <span>✦</span>
-        Konum paylaşımı yalnızca sizin açık izninizle çalışır.
+      <div class="feature-row">
+
+        <div class="feature">
+          <strong>01</strong>
+          <span>Güvenli<br>Paylaşım</span>
+        </div>
+
+        <div class="feature">
+          <strong>02</strong>
+          <span>Canlı<br>Konum</span>
+        </div>
+
+        <div class="feature">
+          <strong>03</strong>
+          <span>Aile<br>Ağı</span>
+        </div>
+
       </div>
 
     </div>
 
 
-    <div class="card auth-card">
+    <div class="auth-card">
 
-      <div class="card-top">
+      <div class="card-glow"></div>
 
-        <small>HOŞ GELDİNİZ</small>
-
-        <h2>Hesabınıza giriş yapın</h2>
-
-        <p>
-          AileTakip hesabınızla devam edin.
-        </p>
-
+      <div class="auth-heading">
+        <span>GÜVENLİ GİRİŞ</span>
+        <h2>Hesabınıza devam edin</h2>
+        <p>AileTakip hesabınızı yönetin.</p>
       </div>
-
 
       <div class="auth-tabs">
-
-        <button class="tab on" id="loginTab">
-          Giriş Yap
-        </button>
-
-        <button class="tab" id="registerTab">
-          Hesap Oluştur
-        </button>
-
+        <button class="tab on" id="loginTab">Giriş Yap</button>
+        <button class="tab" id="registerTab">Hesap Oluştur</button>
       </div>
-
 
       <form id="authForm">
 
-        <label>E-posta</label>
+        <label>E-posta adresi</label>
 
-        <div class="input-wrap">
+        <div class="input-box">
           <span>✉</span>
           <input
             id="email"
@@ -166,21 +154,26 @@
           >
         </div>
 
-
         <label>Şifre</label>
 
-        <div class="input-wrap">
-          <span>●</span>
+        <div class="input-box">
+          <span>◆</span>
+
           <input
             id="password"
             type="password"
-            placeholder="En az 6 karakter"
+            placeholder="Şifrenizi girin"
             minlength="6"
             autocomplete="current-password"
             required
           >
-        </div>
 
+          <button
+            type="button"
+            id="showPassword"
+            class="password-eye"
+          >◉</button>
+        </div>
 
         <button
           class="primary auth-button"
@@ -188,17 +181,16 @@
           type="submit"
         >
           Giriş Yap
+          <span>→</span>
         </button>
 
       </form>
 
-
       <p id="msg"></p>
 
-
-      <div class="card-footer">
-        <span>🔒</span>
-        Güvenli ve izin tabanlı konum paylaşımı
+      <div class="secure-line">
+        <span>●</span>
+        Konum paylaşımı yalnızca sizin izninizle aktifleşir.
       </div>
 
     </div>
@@ -208,117 +200,395 @@
 </section>
 
 
-<!-- ================= UYGULAMA ================= -->
-
+<!-- UYGULAMA -->
 <section id="app">
 
-  <div class="heading">
+  <div class="app-shell">
 
-    <div>
-      <small>AİLETAKİP</small>
-      <h2>Kontrol Merkezi</h2>
-    </div>
+    <!-- SIDEBAR -->
 
-    <span id="status">
-      ● Konum paylaşımı kapalı
-    </span>
+    <aside class="sidebar">
 
-  </div>
+      <div class="sidebar-brand">
+        <div class="mini-brand">
+          <div class="person person-pink"></div>
+          <div class="person person-black"></div>
+          <div class="logo-heart"></div>
+        </div>
+
+        <div>
+          <b>Aile<span>Takip</span></b>
+          <small>Kontrol Merkezi</small>
+        </div>
+      </div>
 
 
-  <div class="layout">
+      <div class="menu-title">MENÜ</div>
 
-    <article class="panel" id="map">
+      <nav class="side-nav">
 
-      <h3>
-        Aile Haritası
+        <a href="#dashboard" class="active">
+          <i>⌂</i>
+          <span>Genel Bakış</span>
+        </a>
 
-        <button id="locate">
-          Konumumu Bul
-        </button>
-      </h3>
+        <a href="#map">
+          <i>⌖</i>
+          <span>Aile Haritası</span>
+        </a>
 
-      <div class="map">
+        <a href="#family">
+          <i>♧</i>
+          <span>Ailem</span>
+        </a>
 
-        <div class="map-grid"></div>
+        <a href="#history">
+          <i>◷</i>
+          <span>Konum Geçmişi</span>
+        </a>
 
-        <i id="pin"></i>
+      </nav>
 
-        <label>
-          Konum izni verildiğinde
-          konumunuz burada görünür.
-        </label>
+
+      <div class="menu-title second">
+        GÜVENLİK
+      </div>
+
+      <nav class="side-nav">
+
+        <a href="#rules">
+          <i>✓</i>
+          <span>Kurallar & Gizlilik</span>
+        </a>
+
+        <a href="#settings">
+          <i>⚙</i>
+          <span>Ayarlar</span>
+        </a>
+
+      </nav>
+
+
+      <div class="sidebar-bottom">
+
+        <div class="security-status">
+          <span class="pulse"></span>
+
+          <div>
+            <strong>Sistem güvenli</strong>
+            <small>Bağlantı aktif</small>
+          </div>
+        </div>
 
       </div>
 
-      <button
-        class="primary"
-        id="share"
-      >
-        Konum Paylaşımını Aç
-      </button>
-
-      <button
-        class="danger"
-        id="stop"
-      >
-        Paylaşımı Durdur
-      </button>
-
-    </article>
+    </aside>
 
 
-    <aside>
+    <!-- MAIN DASHBOARD -->
 
-      <article
-        class="panel"
-        id="family"
-      >
+    <div class="dashboard">
 
-        <h3>Ailem</h3>
+      <div class="dashboard-top">
 
-        <input
-          id="familyName"
-          placeholder="Aile adı"
-        >
+        <div>
+          <small>GENEL BAKIŞ</small>
+          <h1>Kontrol Merkezi</h1>
+        </div>
 
-        <button
-          class="primary"
-          id="create"
-        >
-          Aile Oluştur
-        </button>
+        <div class="live-status">
+          <span></span>
+          Sistem aktif
+        </div>
 
-        <hr>
-
-        <input
-          id="code"
-          placeholder="Davet kodu"
-        >
-
-        <button id="join">
-          Koda Katıl
-        </button>
-
-        <p id="familyInfo"></p>
-
-      </article>
+      </div>
 
 
-      <article
-        class="panel"
-        id="history"
-      >
+      <!-- STAT CARDS -->
 
-        <h3>Konum Geçmişim</h3>
+      <div class="stats">
 
-        <div id="historyList">
-          Henüz kayıt yok.
+        <div class="stat-card">
+          <div class="stat-icon pink">⌖</div>
+          <div>
+            <small>KONUM</small>
+            <strong>Hazır</strong>
+            <span>Paylaşımı yönet</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">♧</div>
+          <div>
+            <small>AİLE</small>
+            <strong>Aktif</strong>
+            <span>Aile bağlantınızı yönetin</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">◷</div>
+          <div>
+            <small>GEÇMİŞ</small>
+            <strong>Güvenli</strong>
+            <span>Konum kayıtları</span>
+          </div>
+        </div>
+
+      </div>
+
+
+      <!-- HARİTA -->
+
+      <article class="panel map-panel" id="map">
+
+        <div class="panel-heading">
+
+          <div>
+            <small>CANLI TAKİP</small>
+            <h2>Aile Haritası</h2>
+          </div>
+
+          <button id="locate" class="outline-btn">
+            <span>⌖</span>
+            Konumumu Bul
+          </button>
+
+        </div>
+
+
+        <div class="map">
+
+          <div class="map-glow"></div>
+
+          <div class="map-grid"></div>
+
+          <div class="map-road road-one"></div>
+          <div class="map-road road-two"></div>
+          <div class="map-road road-three"></div>
+
+          <div class="map-city city-one">D</div>
+          <div class="map-city city-two">A</div>
+          <div class="map-city city-three">İ</div>
+
+          <div class="location-ring ring-one"></div>
+          <div class="location-ring ring-two"></div>
+
+          <i id="pin"></i>
+
+          <div class="map-center-text">
+            <strong>Konum paylaşımı</strong>
+            <span>Konum izni verildiğinde burada görünür.</span>
+          </div>
+
+          <div class="map-corner">
+            <span></span>
+            GÜVENLİ HARİTA
+          </div>
+
+        </div>
+
+
+        <div class="map-actions">
+
+          <button class="primary" id="share">
+            <span>◉</span>
+            Konum Paylaşımını Aç
+          </button>
+
+          <button class="danger" id="stop">
+            Paylaşımı Durdur
+          </button>
+
         </div>
 
       </article>
 
-    </aside>
+
+      <div class="dashboard-grid">
+
+
+        <!-- AİLEM -->
+
+        <article class="panel" id="family">
+
+          <div class="panel-heading compact">
+
+            <div>
+              <small>AİLE AĞI</small>
+              <h2>Ailem</h2>
+            </div>
+
+            <span class="panel-dot"></span>
+
+          </div>
+
+          <div class="family-create">
+
+            <input
+              id="familyName"
+              placeholder="Aile adı"
+            >
+
+            <button class="primary" id="create">
+              Aile Oluştur
+            </button>
+
+          </div>
+
+          <div class="divider">
+            <span>veya davet kodu</span>
+          </div>
+
+          <input
+            id="code"
+            class="dark-input"
+            placeholder="Davet kodunu girin"
+          >
+
+          <button id="join" class="outline-wide">
+            Aileye Katıl
+            <span>→</span>
+          </button>
+
+          <div id="familyInfo"></div>
+
+        </article>
+
+
+        <!-- GEÇMİŞ -->
+
+        <article class="panel" id="history">
+
+          <div class="panel-heading compact">
+
+            <div>
+              <small>HAREKETLER</small>
+              <h2>Konum Geçmişim</h2>
+            </div>
+
+            <span class="history-live">●</span>
+
+          </div>
+
+          <div id="historyList">
+            <div class="empty-history">
+              <span>◷</span>
+              <strong>Henüz kayıt yok</strong>
+              <small>Konum paylaşımı başlatıldığında<br>geçmiş burada görünecek.</small>
+            </div>
+          </div>
+
+        </article>
+
+      </div>
+
+
+      <!-- KURALLAR -->
+
+      <article class="panel rules-panel" id="rules">
+
+        <div class="panel-heading compact">
+
+          <div>
+            <small>GÜVENLİK MERKEZİ</small>
+            <h2>Kurallar & Gizlilik</h2>
+          </div>
+
+          <div class="shield">✓</div>
+
+        </div>
+
+
+        <div class="rules-grid">
+
+          <div class="rule">
+            <span>01</span>
+            <div>
+              <strong>Açık izin</strong>
+              <p>
+                Konum paylaşımı siz izin vermeden
+                başlatılmaz.
+              </p>
+            </div>
+          </div>
+
+          <div class="rule">
+            <span>02</span>
+            <div>
+              <strong>Kontrol sizde</strong>
+              <p>
+                Konum paylaşımını istediğiniz zaman
+                durdurabilirsiniz.
+              </p>
+            </div>
+          </div>
+
+          <div class="rule">
+            <span>03</span>
+            <div>
+              <strong>Aile bağlantısı</strong>
+              <p>
+                Aile sistemi davet kodu üzerinden
+                yönetilir.
+              </p>
+            </div>
+          </div>
+
+          <div class="rule">
+            <span>04</span>
+            <div>
+              <strong>Güvenli kullanım</strong>
+              <p>
+                Hesap bilgilerinizi başka kişilerle
+                paylaşmayın.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+      </article>
+
+
+      <!-- AYARLAR -->
+
+      <article class="panel settings-panel" id="settings">
+
+        <div class="panel-heading compact">
+
+          <div>
+            <small>HESAP</small>
+            <h2>Ayarlar</h2>
+          </div>
+
+        </div>
+
+        <div class="setting-row">
+          <div>
+            <strong>Konum paylaşımı</strong>
+            <span>Konumunuzu aile ağıyla paylaşın.</span>
+          </div>
+
+          <div class="setting-badge">
+            İzin tabanlı
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div>
+            <strong>Hesap güvenliği</strong>
+            <span>Hesabınızı güvenli tutun.</span>
+          </div>
+
+          <div class="setting-badge green">
+            Aktif
+          </div>
+        </div>
+
+      </article>
+
+    </div>
 
   </div>
 
@@ -333,8 +603,6 @@
 </div>
 
 
-<!-- ================= AÇILIŞ ANİMASYONU ================= -->
-
 <script>
 
 const splash = document.getElementById("splash");
@@ -345,31 +613,75 @@ let progress = 0;
 
 const loader = setInterval(() => {
 
-  progress += Math.random() * 8 + 3;
+  progress += Math.random() * 7 + 3;
 
-  if (progress >= 100) {
+  if(progress >= 100){
 
     progress = 100;
-
     clearInterval(loader);
 
     setTimeout(() => {
 
       splash.classList.add("hide");
-
       site.classList.add("show");
 
       setTimeout(() => {
         splash.remove();
       }, 900);
 
-    }, 350);
-
+    }, 400);
   }
 
   loadingBar.style.width = progress + "%";
 
-}, 80);
+}, 90);
+
+
+// ŞİFRE GÖSTER / GİZLE
+
+const showPassword =
+  document.getElementById("showPassword");
+
+const password =
+  document.getElementById("password");
+
+if(showPassword){
+
+  showPassword.addEventListener("click", () => {
+
+    if(password.type === "password"){
+
+      password.type = "text";
+      showPassword.textContent = "◉";
+
+    }else{
+
+      password.type = "password";
+      showPassword.textContent = "○";
+
+    }
+
+  });
+
+}
+
+
+// MENÜ AKTİF EFEKTİ
+
+document.querySelectorAll(".side-nav a")
+.forEach(link => {
+
+  link.addEventListener("click", () => {
+
+    document
+      .querySelectorAll(".side-nav a")
+      .forEach(x => x.classList.remove("active"));
+
+    link.classList.add("active");
+
+  });
+
+});
 
 </script>
 
