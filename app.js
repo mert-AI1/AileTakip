@@ -24,9 +24,9 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 
-/* =========================
+/* =====================================================
    FIREBASE
-========================= */
+===================================================== */
 
 const firebaseConfig = {
   apiKey: "AIzaSyBbcmDCB3Yfw69TTwKKrMrKNKj-eEK7A8o",
@@ -34,415 +34,850 @@ const firebaseConfig = {
   projectId: "ailetakip-9e888",
   storageBucket: "ailetakip-9e888.firebasestorage.app",
   messagingSenderId: "48061317195",
-  appId: "1:48061317195:web:e27852c6196da6e814cdce",
-  measurementId: "G-YLJJ2R5MG3"
+  appId: "1:48061317195:web:d4bd10f862c119c314cdce",
+  measurementId: "G-9CKC2XNHBE"
 };
 
 const app = initializeApp(firebaseConfig);
+
 const auth = getAuth(app);
+
 const db = getFirestore(app);
 
+
+/* =====================================================
+   DEĞİŞKENLER
+===================================================== */
+
 let mode = "login";
+
 let watch = null;
 
 
-/* =========================
+/* =====================================================
    KISA YARDIMCILAR
-========================= */
+===================================================== */
 
 const $ = id => document.getElementById(id);
 
+
 function toast(message) {
+
   const box = $("toast");
 
   if (!box) return;
 
   box.textContent = message;
+
   box.style.display = "block";
 
   setTimeout(() => {
+
     box.style.display = "none";
+
   }, 2500);
 }
 
 
-/* =========================
+/* =====================================================
    GİRİŞ / KAYIT SEKME
-========================= */
+===================================================== */
 
-$("loginTab").onclick = () => {
+if ($("loginTab")) {
 
-  mode = "login";
+  $("loginTab").onclick = () => {
 
-  $("loginTab").classList.add("on");
-  $("registerTab").classList.remove("on");
+    mode = "login";
 
-  $("authSubmit").textContent = "Giriş Yap";
-  $("msg").textContent = "";
-};
+    $("loginTab").classList.add("on");
 
+    $("registerTab").classList.remove("on");
 
-$("registerTab").onclick = () => {
+    $("authSubmit").textContent = "Giriş Yap";
 
-  mode = "register";
+    $("msg").textContent = "";
 
-  $("registerTab").classList.add("on");
-  $("loginTab").classList.remove("on");
+  };
 
-  $("authSubmit").textContent = "Kayıt Ol";
-  $("msg").textContent = "";
-};
+}
 
 
-/* =========================
+if ($("registerTab")) {
+
+  $("registerTab").onclick = () => {
+
+    mode = "register";
+
+    $("registerTab").classList.add("on");
+
+    $("loginTab").classList.remove("on");
+
+    $("authSubmit").textContent = "Kayıt Ol";
+
+    $("msg").textContent = "";
+
+  };
+
+}
+
+
+/* =====================================================
    GİRİŞ / KAYIT
-========================= */
+===================================================== */
 
-$("authForm").onsubmit = async event => {
+if ($("authForm")) {
 
-  event.preventDefault();
+  $("authForm").onsubmit = async event => {
 
-  const email = $("email").value.trim();
-  const password = $("password").value;
+    event.preventDefault();
 
-  $("msg").textContent = "İşlem yapılıyor...";
+    const email =
+      $("email").value.trim();
 
-  try {
+    const password =
+      $("password").value;
 
-    if (mode === "login") {
 
-      await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+    $("msg").textContent =
+      "İşlem yapılıyor...";
 
-      $("msg").textContent = "";
 
-      toast("Giriş başarılı.");
+    try {
 
-    } else {
+      /* -------------------------
+         GİRİŞ
+      ------------------------- */
 
-      const result =
-        await createUserWithEmailAndPassword(
+      if (mode === "login") {
+
+        await signInWithEmailAndPassword(
           auth,
           email,
           password
         );
 
-      await setDoc(
-        doc(db, "users", result.user.uid),
-        {
-          email: email,
-          createdAt: Date.now()
-        },
-        {
-          merge: true
-        }
+        $("msg").textContent = "";
+
+        toast("Giriş başarılı.");
+
+      }
+
+
+      /* -------------------------
+         KAYIT
+      ------------------------- */
+
+      else {
+
+        const result =
+          await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+
+
+        await setDoc(
+
+          doc(
+            db,
+            "users",
+            result.user.uid
+          ),
+
+          {
+
+            email: email,
+
+            createdAt: Date.now(),
+
+            familyId: null
+
+          },
+
+          {
+
+            merge: true
+
+          }
+
+        );
+
+
+        $("msg").textContent = "";
+
+        toast(
+          "Hesabınız oluşturuldu."
+        );
+
+      }
+
+    }
+
+
+    /* -------------------------
+       HATA
+    ------------------------- */
+
+    catch (error) {
+
+      console.error(error);
+
+      let message =
+        "Bir hata oluştu.";
+
+
+      if (
+        error.code ===
+        "auth/email-already-in-use"
+      ) {
+
+        message =
+          "Bu e-posta zaten kayıtlı.";
+
+      }
+
+
+      else if (
+        error.code ===
+        "auth/invalid-email"
+      ) {
+
+        message =
+          "Geçerli bir e-posta adresi girin.";
+
+      }
+
+
+      else if (
+        error.code ===
+        "auth/weak-password"
+      ) {
+
+        message =
+          "Şifre en az 6 karakter olmalıdır.";
+
+      }
+
+
+      else if (
+        error.code ===
+        "auth/invalid-credential" ||
+
+        error.code ===
+        "auth/wrong-password" ||
+
+        error.code ===
+        "auth/user-not-found"
+      ) {
+
+        message =
+          "E-posta veya şifre hatalı.";
+
+      }
+
+
+      else if (
+        error.code ===
+        "auth/too-many-requests"
+      ) {
+
+        message =
+          "Çok fazla deneme yapıldı. Bir süre sonra tekrar deneyin.";
+
+      }
+
+
+      $("msg").textContent =
+        message;
+
+    }
+
+  };
+
+}
+
+
+/* =====================================================
+   OTURUM KONTROLÜ
+===================================================== */
+
+onAuthStateChanged(
+  auth,
+  async user => {
+
+    if (user) {
+
+      if ($("auth")) {
+
+        $("auth").style.display =
+          "none";
+
+      }
+
+
+      if ($("app")) {
+
+        $("app").style.display =
+          "block";
+
+      }
+
+
+      if ($("logout")) {
+
+        $("logout").style.display =
+          "block";
+
+      }
+
+
+      await loadUserFamily(
+        user.uid
       );
 
-      $("msg").textContent = "";
 
-      toast("Hesabınız oluşturuldu.");
+      await loadHistory(
+        user.uid
+      );
 
     }
 
-  } catch (error) {
 
-    console.error(error);
+    else {
 
-    let message = "Bir hata oluştu.";
+      if ($("auth")) {
 
-    if (error.code === "auth/email-already-in-use") {
-      message = "Bu e-posta zaten kayıtlı.";
+        $("auth").style.display =
+          "block";
+
+      }
+
+
+      if ($("app")) {
+
+        $("app").style.display =
+          "none";
+
+      }
+
+
+      if ($("logout")) {
+
+        $("logout").style.display =
+          "none";
+
+      }
+
     }
 
-    else if (error.code === "auth/invalid-email") {
-      message = "Geçerli bir e-posta adresi girin.";
-    }
-
-    else if (error.code === "auth/weak-password") {
-      message = "Şifre en az 6 karakter olmalıdır.";
-    }
-
-    else if (
-      error.code === "auth/invalid-credential" ||
-      error.code === "auth/wrong-password" ||
-      error.code === "auth/user-not-found"
-    ) {
-      message = "E-posta veya şifre hatalı.";
-    }
-
-    $("msg").textContent = message;
   }
-};
+);
 
 
-/* =========================
-   OTURUM KONTROLÜ
-========================= */
-
-onAuthStateChanged(auth, async user => {
-
-  if (user) {
-
-    $("auth").style.display = "none";
-    $("app").style.display = "block";
-    $("logout").style.display = "block";
-
-    await loadUserFamily(user.uid);
-
-    await loadHistory(user.uid);
-
-  } else {
-
-    $("auth").style.display = "block";
-    $("app").style.display = "none";
-    $("logout").style.display = "none";
-  }
-
-});
-
-
-/* =========================
+/* =====================================================
    ÇIKIŞ
-========================= */
+===================================================== */
 
-$("logout").onclick = async () => {
+if ($("logout")) {
 
-  try {
+  $("logout").onclick = async () => {
 
-    if (watch !== null) {
-      navigator.geolocation.clearWatch(watch);
-      watch = null;
+    try {
+
+      if (watch !== null) {
+
+        navigator.geolocation.clearWatch(
+          watch
+        );
+
+        watch = null;
+
+      }
+
+
+      await signOut(auth);
+
+
+      sharing(false);
+
+
+      toast(
+        "Çıkış yapıldı."
+      );
+
     }
 
-    await signOut(auth);
 
-    sharing(false);
+    catch (error) {
 
-    toast("Çıkış yapıldı.");
+      console.error(error);
 
-  } catch (error) {
+    }
 
-    console.error(error);
+  };
 
-  }
-
-};
+}
 
 
-/* =========================
+/* =====================================================
    KULLANICI AİLESİNİ GETİR
-========================= */
+===================================================== */
 
 async function loadUserFamily(uid) {
 
   try {
 
-    const userRef = doc(db, "users", uid);
-    const userSnap = await getDoc(userRef);
+    const userRef =
+      doc(
+        db,
+        "users",
+        uid
+      );
+
+
+    const userSnap =
+      await getDoc(
+        userRef
+      );
+
 
     if (!userSnap.exists()) {
-      $("familyInfo").textContent = "Henüz bir aileniz yok.";
+
+      if ($("familyInfo")) {
+
+        $("familyInfo").textContent =
+          "Henüz bir aileniz yok.";
+
+      }
+
       return;
+
     }
 
-    const data = userSnap.data();
+
+    const data =
+      userSnap.data();
+
 
     if (!data.familyId) {
-      $("familyInfo").textContent = "Henüz bir aileniz yok.";
+
+      if ($("familyInfo")) {
+
+        $("familyInfo").textContent =
+          "Henüz bir aileniz yok.";
+
+      }
+
       return;
+
     }
 
-    const familyRef = doc(db, "families", data.familyId);
-    const familySnap = await getDoc(familyRef);
+
+    const familyRef =
+      doc(
+        db,
+        "families",
+        data.familyId
+      );
+
+
+    const familySnap =
+      await getDoc(
+        familyRef
+      );
+
 
     if (!familySnap.exists()) {
-      $("familyInfo").textContent = "Aile bulunamadı.";
+
+      if ($("familyInfo")) {
+
+        $("familyInfo").textContent =
+          "Aile bulunamadı.";
+
+      }
+
       return;
+
     }
 
-    const family = familySnap.data();
 
-    $("familyInfo").innerHTML =
-      `<b>${escapeHtml(family.name)}</b><br>
-       Davet kodu: <strong>${escapeHtml(family.code)}</strong>`;
+    const family =
+      familySnap.data();
 
-  } catch (error) {
+
+    if ($("familyInfo")) {
+
+      $("familyInfo").innerHTML =
+
+        `<b>${escapeHtml(
+          family.name
+        )}</b><br>
+
+        Davet kodu:
+
+        <strong>${escapeHtml(
+          family.code
+        )}</strong>`;
+
+    }
+
+  }
+
+
+  catch (error) {
 
     console.error(error);
 
-    $("familyInfo").textContent =
-      "Aile bilgileri yüklenemedi.";
+
+    if ($("familyInfo")) {
+
+      $("familyInfo").textContent =
+        "Aile bilgileri yüklenemedi.";
+
+    }
+
   }
+
 }
 
 
-/* =========================
+/* =====================================================
    AİLE OLUŞTUR
-========================= */
+===================================================== */
 
-$("create").onclick = async () => {
+if ($("create")) {
 
-  const user = auth.currentUser;
+  $("create").onclick = async () => {
 
-  if (!user) {
-    toast("Önce giriş yapmalısınız.");
-    return;
-  }
-
-  const name =
-    $("familyName").value.trim() || "Ailem";
-
-  const code =
-    Math.random()
-      .toString(36)
-      .substring(2, 8)
-      .toUpperCase();
-
-  try {
-
-    const familyRef =
-      doc(collection(db, "families"));
-
-    await setDoc(familyRef, {
-
-      name: name,
-      code: code,
-      ownerId: user.uid,
-      createdAt: Date.now()
-
-    });
-
-    await setDoc(
-      doc(db, "users", user.uid),
-      {
-        familyId: familyRef.id,
-        email: user.email
-      },
-      {
-        merge: true
-      }
-    );
-
-    $("familyInfo").innerHTML =
-      `<b>${escapeHtml(name)}</b><br>
-       Davet kodu: <strong>${code}</strong>`;
-
-    toast("Aile oluşturuldu.");
-
-  } catch (error) {
-
-    console.error(error);
-
-    toast("Aile oluşturulamadı.");
-  }
-};
+    const user =
+      auth.currentUser;
 
 
-/* =========================
-   AİLEYE KATIL
-========================= */
+    if (!user) {
 
-$("join").onclick = async () => {
+      toast(
+        "Önce giriş yapmalısınız."
+      );
 
-  const user = auth.currentUser;
-
-  if (!user) {
-    toast("Önce giriş yapmalısınız.");
-    return;
-  }
-
-  const code =
-    $("code").value.trim().toUpperCase();
-
-  if (!code) {
-    toast("Davet kodunu girin.");
-    return;
-  }
-
-  try {
-
-    const result = await getDocs(
-      query(
-        collection(db, "families"),
-        where("code", "==", code),
-        limit(1)
-      )
-    );
-
-    if (result.empty) {
-
-      toast("Davet kodu bulunamadı.");
       return;
+
     }
 
-    const family = result.docs[0];
 
-    await setDoc(
-      doc(db, "users", user.uid),
-      {
-        familyId: family.id,
-        email: user.email
-      },
-      {
-        merge: true
+    const name =
+      $("familyName").value.trim()
+      || "Ailem";
+
+
+    const code =
+      Math.random()
+        .toString(36)
+        .substring(2, 8)
+        .toUpperCase();
+
+
+    try {
+
+      const familyRef =
+        doc(
+          collection(
+            db,
+            "families"
+          )
+        );
+
+
+      await setDoc(
+
+        familyRef,
+
+        {
+
+          name: name,
+
+          code: code,
+
+          ownerId: user.uid,
+
+          createdAt: Date.now()
+
+        }
+
+      );
+
+
+      await setDoc(
+
+        doc(
+          db,
+          "users",
+          user.uid
+        ),
+
+        {
+
+          familyId:
+            familyRef.id,
+
+          email:
+            user.email
+
+        },
+
+        {
+
+          merge: true
+
+        }
+
+      );
+
+
+      if ($("familyInfo")) {
+
+        $("familyInfo").innerHTML =
+
+          `<b>${escapeHtml(
+            name
+          )}</b><br>
+
+          Davet kodu:
+
+          <strong>${escapeHtml(
+            code
+          )}</strong>`;
+
       }
-    );
-
-    const familyData = family.data();
-
-    $("familyInfo").innerHTML =
-      `<b>${escapeHtml(familyData.name)}</b><br>
-       Davet kodu: <strong>${escapeHtml(familyData.code)}</strong>`;
-
-    toast("Aileye katıldınız.");
-
-  } catch (error) {
-
-    console.error(error);
-
-    toast("Aileye katılırken hata oluştu.");
-  }
-};
 
 
-/* =========================
+      toast(
+        "Aile oluşturuldu."
+      );
+
+    }
+
+
+    catch (error) {
+
+      console.error(error);
+
+      toast(
+        "Aile oluşturulamadı."
+      );
+
+    }
+
+  };
+
+}
+
+
+/* =====================================================
+   AİLEYE KATIL
+===================================================== */
+
+if ($("join")) {
+
+  $("join").onclick = async () => {
+
+    const user =
+      auth.currentUser;
+
+
+    if (!user) {
+
+      toast(
+        "Önce giriş yapmalısınız."
+      );
+
+      return;
+
+    }
+
+
+    const code =
+      $("code").value
+        .trim()
+        .toUpperCase();
+
+
+    if (!code) {
+
+      toast(
+        "Davet kodunu girin."
+      );
+
+      return;
+
+    }
+
+
+    try {
+
+      const result =
+        await getDocs(
+
+          query(
+
+            collection(
+              db,
+              "families"
+            ),
+
+            where(
+              "code",
+              "==",
+              code
+            ),
+
+            limit(1)
+
+          )
+
+        );
+
+
+      if (result.empty) {
+
+        toast(
+          "Davet kodu bulunamadı."
+        );
+
+        return;
+
+      }
+
+
+      const family =
+        result.docs[0];
+
+
+      await setDoc(
+
+        doc(
+          db,
+          "users",
+          user.uid
+        ),
+
+        {
+
+          familyId:
+            family.id,
+
+          email:
+            user.email
+
+        },
+
+        {
+
+          merge: true
+
+        }
+
+      );
+
+
+      const familyData =
+        family.data();
+
+
+      if ($("familyInfo")) {
+
+        $("familyInfo").innerHTML =
+
+          `<b>${escapeHtml(
+            familyData.name
+          )}</b><br>
+
+          Davet kodu:
+
+          <strong>${escapeHtml(
+            familyData.code
+          )}</strong>`;
+
+      }
+
+
+      toast(
+        "Aileye katıldınız."
+      );
+
+    }
+
+
+    catch (error) {
+
+      console.error(error);
+
+      toast(
+        "Aileye katılırken hata oluştu."
+      );
+
+    }
+
+  };
+
+}
+
+
+/* =====================================================
    KONUM PAYLAŞIM DURUMU
-========================= */
+===================================================== */
 
 function sharing(on) {
 
+  if (!$("status")) return;
+
+
   $("status").textContent =
+
     on
+
       ? "● Konum paylaşımı açık"
+
       : "● Konum paylaşımı kapalı";
 
+
   $("status").style.color =
+
     on
+
       ? "#63e6a8"
+
       : "#aaa";
+
 }
 
 
-/* =========================
+/* =====================================================
    KONUMU FIRESTORE'A KAYDET
-========================= */
+===================================================== */
 
 async function save(position) {
 
-  const user = auth.currentUser;
+  const user =
+    auth.currentUser;
+
 
   if (!user) return;
+
 
   try {
 
     await addDoc(
-      collection(db, "locations"),
+
+      collection(
+        db,
+        "locations"
+      ),
+
       {
 
-        uid: user.uid,
+        uid:
+          user.uid,
 
         latitude:
           position.coords.latitude,
@@ -453,31 +888,51 @@ async function save(position) {
         accuracy:
           position.coords.accuracy,
 
-        createdAt: Date.now()
+        createdAt:
+          Date.now()
 
       }
+
     );
 
-    const pin = $("pin");
 
-    pin.style.display = "block";
-    pin.style.left = "50%";
-    pin.style.top = "50%";
+    if ($("pin")) {
 
-    await loadHistory(user.uid);
+      $("pin").style.display =
+        "block";
 
-  } catch (error) {
+      $("pin").style.left =
+        "50%";
+
+      $("pin").style.top =
+        "50%";
+
+    }
+
+
+    await loadHistory(
+      user.uid
+    );
+
+  }
+
+
+  catch (error) {
 
     console.error(error);
 
-    toast("Konum kaydedilemedi.");
+    toast(
+      "Konum kaydedilemedi."
+    );
+
   }
+
 }
 
 
-/* =========================
+/* =====================================================
    KONUM PAYLAŞIMINI BAŞLAT
-========================= */
+===================================================== */
 
 function start() {
 
@@ -488,7 +943,9 @@ function start() {
     );
 
     return;
+
   }
+
 
   navigator.geolocation.getCurrentPosition(
 
@@ -496,9 +953,12 @@ function start() {
 
       save(position);
 
-      toast("Konumunuz alındı.");
+      toast(
+        "Konumunuz alındı."
+      );
 
     },
+
 
     error => {
 
@@ -510,13 +970,30 @@ function start() {
 
     },
 
+
     {
-      enableHighAccuracy: true,
-      timeout: 15000,
-      maximumAge: 0
+
+      enableHighAccuracy:
+        true,
+
+      timeout:
+        15000,
+
+      maximumAge:
+        0
+
     }
 
   );
+
+
+  if (watch !== null) {
+
+    navigator.geolocation.clearWatch(
+      watch
+    );
+
+  }
 
 
   watch =
@@ -528,129 +1005,248 @@ function start() {
 
       },
 
+
       error => {
 
         console.error(error);
 
       },
 
+
       {
-        enableHighAccuracy: true,
-        maximumAge: 10000,
-        timeout: 15000
+
+        enableHighAccuracy:
+          true,
+
+        maximumAge:
+          10000,
+
+        timeout:
+          15000
+
       }
 
     );
 
+
   sharing(true);
+
 }
 
 
-/* =========================
-   BUTONLAR
-========================= */
+/* =====================================================
+   KONUM PAYLAŞ BUTONU
+===================================================== */
 
-$("share").onclick = () => {
+if ($("share")) {
 
-  start();
+  $("share").onclick = () => {
 
-  toast("Konum paylaşımı açıldı.");
-};
+    start();
 
+    toast(
+      "Konum paylaşımı açıldı."
+    );
 
-$("locate").onclick = () => {
+  };
 
-  start();
-
-};
-
-
-$("stop").onclick = () => {
-
-  if (watch !== null) {
-
-    navigator.geolocation.clearWatch(watch);
-
-    watch = null;
-  }
-
-  sharing(false);
-
-  toast("Konum paylaşımı durduruldu.");
-};
+}
 
 
-/* =========================
+/* =====================================================
+   KONUMU BUL
+===================================================== */
+
+if ($("locate")) {
+
+  $("locate").onclick = () => {
+
+    start();
+
+  };
+
+}
+
+
+/* =====================================================
+   KONUM PAYLAŞIMINI DURDUR
+===================================================== */
+
+if ($("stop")) {
+
+  $("stop").onclick = () => {
+
+    if (watch !== null) {
+
+      navigator.geolocation.clearWatch(
+        watch
+      );
+
+      watch = null;
+
+    }
+
+
+    sharing(false);
+
+
+    toast(
+      "Konum paylaşımı durduruldu."
+    );
+
+  };
+
+}
+
+
+/* =====================================================
    KONUM GEÇMİŞİ
-========================= */
+===================================================== */
 
 async function loadHistory(uid) {
 
   try {
 
-    const result = await getDocs(
-      query(
-        collection(db, "locations"),
-        where("uid", "==", uid),
-        limit(10)
-      )
-    );
+    const result =
+      await getDocs(
+
+        query(
+
+          collection(
+            db,
+            "locations"
+          ),
+
+          where(
+            "uid",
+            "==",
+            uid
+          ),
+
+          limit(10)
+
+        )
+
+      );
+
 
     if (result.empty) {
 
-      $("historyList").textContent =
-        "Henüz kayıt yok.";
+      if ($("historyList")) {
+
+        $("historyList").textContent =
+          "Henüz kayıt yok.";
+
+      }
 
       return;
+
     }
 
+
     const locations =
+
       result.docs
-        .map(doc => doc.data())
+
+        .map(
+          document =>
+            document.data()
+        )
+
         .sort(
+
           (a, b) =>
-            b.createdAt - a.createdAt
+            b.createdAt -
+            a.createdAt
+
         );
 
-    $("historyList").innerHTML =
-      locations
-        .map(location => {
 
-          const date =
-            new Date(
-              location.createdAt
-            ).toLocaleString("tr-TR");
+    if ($("historyList")) {
 
-          return `
-            <div class="historyItem">
-              ${date}
-            </div>
-          `;
+      $("historyList").innerHTML =
 
-        })
-        .join("");
+        locations
 
-  } catch (error) {
+          .map(location => {
+
+            const date =
+
+              new Date(
+                location.createdAt
+              )
+                .toLocaleString(
+                  "tr-TR"
+                );
+
+
+            return `
+
+              <div class="historyItem">
+
+                ${escapeHtml(date)}
+
+              </div>
+
+            `;
+
+          })
+
+          .join("");
+
+    }
+
+  }
+
+
+  catch (error) {
 
     console.error(error);
 
-    $("historyList").textContent =
-      "Geçmiş yüklenemedi. Firestore ayarlarını kontrol edin.";
+
+    if ($("historyList")) {
+
+      $("historyList").textContent =
+        "Geçmiş yüklenemedi. Firestore ayarlarını kontrol edin.";
+
+    }
+
   }
+
 }
 
 
-/* =========================
+/* =====================================================
    GÜVENLİ HTML
-========================= */
+===================================================== */
 
 function escapeHtml(value) {
 
   return String(value)
 
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
+
 }
