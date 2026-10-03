@@ -1,1 +1,377 @@
-<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AileTakip</title><link rel="stylesheet" href="style.css"></head><body><header><b>Aile<span>Takip</span></b><nav><a href="#map">Harita</a><a href="#family">Ailem</a><a href="#history">Geçmiş</a></nav><button id="logout">Çıkış</button></header><main><section id="auth"><div class="card"><small>GERÇEK UYGULAMA</small><h1>Ailenizle <em>güvenli</em> bağlantı.</h1><p>Hesap oluşturun. Konum paylaşımı yalnızca açık izninizle çalışır.</p><div><button class="tab on" id="loginTab">Giriş Yap</button><button class="tab" id="registerTab">Kayıt Ol</button></div><form id="authForm"><input id="email" type="email" placeholder="E-posta" required><input id="password" type="password" placeholder="Şifre (en az 6 karakter)" minlength="6" required><button class="primary" id="authSubmit">Giriş Yap</button></form><p id="msg"></p></div></section><section id="app"><div class="heading"><div><small>AİLETAKİP</small><h2>Kontrol Merkezi</h2></div><span id="status">● Konum paylaşımı kapalı</span></div><div class="layout"><article class="panel" id="map"><h3>Aile Haritası <button id="locate">Konumumu Bul</button></h3><div class="map"><i id="pin"></i><label>Konum izni verildiğinde konumunuz burada görünür.</label></div><button class="primary" id="share">Konum Paylaşımını Aç</button><button class="danger" id="stop">Paylaşımı Durdur</button></article><aside><article class="panel" id="family"><h3>Ailem</h3><input id="familyName" placeholder="Aile adı"><button class="primary" id="create">Aile Oluştur</button><hr><input id="code" placeholder="Davet kodu"><button id="join">Koda Katıl</button><p id="familyInfo"></p></article><article class="panel" id="history"><h3>Konum Geçmişim</h3><div id="historyList">Henüz kayıt yok.</div></article></aside></div></section></main><div id="toast"></div><script type="module" src="app.js"></script></body></html>
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#09090d">
+<title>AileTakip</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- ================= SPLASH ================= -->
+
+<div id="splash">
+
+  <div class="splash-content">
+
+    <div class="brand-logo logo-large" aria-label="AileTakip">
+
+      <div class="person person-pink"></div>
+      <div class="person person-black"></div>
+
+      <div class="logo-heart"></div>
+
+    </div>
+
+    <div class="splash-name">
+      Aile<span>Takip</span>
+    </div>
+
+    <div class="loading-line">
+      <div id="loadingBar"></div>
+    </div>
+
+    <div class="loading-text">
+      Güvenli bağlantı kuruluyor
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ================= ANA SİTE ================= -->
+
+<div id="site">
+
+<header>
+
+  <div class="brand">
+
+    <div class="brand-logo logo-small">
+
+      <div class="person person-pink"></div>
+      <div class="person person-black"></div>
+
+      <div class="logo-heart"></div>
+
+    </div>
+
+    <div>
+      <b>Aile<span>Takip</span></b>
+      <small>Ailenizle güvenli bağlantı</small>
+    </div>
+
+  </div>
+
+  <nav>
+    <a href="#map">Harita</a>
+    <a href="#family">Ailem</a>
+    <a href="#history">Geçmiş</a>
+  </nav>
+
+  <button id="logout">Çıkış</button>
+
+</header>
+
+
+<main>
+
+<!-- ================= GİRİŞ ================= -->
+
+<section id="auth">
+
+  <div class="auth-background-glow glow-one"></div>
+  <div class="auth-background-glow glow-two"></div>
+
+  <div class="auth-layout">
+
+    <div class="welcome">
+
+      <div class="mini-logo">
+
+        <div class="brand-logo logo-medium">
+
+          <div class="person person-pink"></div>
+          <div class="person person-black"></div>
+
+          <div class="logo-heart"></div>
+
+        </div>
+
+      </div>
+
+      <small class="eyebrow">AİLETAKİP</small>
+
+      <h1>
+        Ailenizle<br>
+        <em>bağlantıda</em> kalın.
+      </h1>
+
+      <p>
+        Sevdiklerinizin konumunu, aile bağlantılarınızı
+        ve güvenli paylaşımınızı tek bir merkezden yönetin.
+      </p>
+
+      <div class="security-note">
+        <span>✦</span>
+        Konum paylaşımı yalnızca sizin açık izninizle çalışır.
+      </div>
+
+    </div>
+
+
+    <div class="card auth-card">
+
+      <div class="card-top">
+
+        <small>HOŞ GELDİNİZ</small>
+
+        <h2>Hesabınıza giriş yapın</h2>
+
+        <p>
+          AileTakip hesabınızla devam edin.
+        </p>
+
+      </div>
+
+
+      <div class="auth-tabs">
+
+        <button class="tab on" id="loginTab">
+          Giriş Yap
+        </button>
+
+        <button class="tab" id="registerTab">
+          Hesap Oluştur
+        </button>
+
+      </div>
+
+
+      <form id="authForm">
+
+        <label>E-posta</label>
+
+        <div class="input-wrap">
+          <span>✉</span>
+          <input
+            id="email"
+            type="email"
+            placeholder="ornek@email.com"
+            autocomplete="email"
+            required
+          >
+        </div>
+
+
+        <label>Şifre</label>
+
+        <div class="input-wrap">
+          <span>●</span>
+          <input
+            id="password"
+            type="password"
+            placeholder="En az 6 karakter"
+            minlength="6"
+            autocomplete="current-password"
+            required
+          >
+        </div>
+
+
+        <button
+          class="primary auth-button"
+          id="authSubmit"
+          type="submit"
+        >
+          Giriş Yap
+        </button>
+
+      </form>
+
+
+      <p id="msg"></p>
+
+
+      <div class="card-footer">
+        <span>🔒</span>
+        Güvenli ve izin tabanlı konum paylaşımı
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ================= UYGULAMA ================= -->
+
+<section id="app">
+
+  <div class="heading">
+
+    <div>
+      <small>AİLETAKİP</small>
+      <h2>Kontrol Merkezi</h2>
+    </div>
+
+    <span id="status">
+      ● Konum paylaşımı kapalı
+    </span>
+
+  </div>
+
+
+  <div class="layout">
+
+    <article class="panel" id="map">
+
+      <h3>
+        Aile Haritası
+
+        <button id="locate">
+          Konumumu Bul
+        </button>
+      </h3>
+
+      <div class="map">
+
+        <div class="map-grid"></div>
+
+        <i id="pin"></i>
+
+        <label>
+          Konum izni verildiğinde
+          konumunuz burada görünür.
+        </label>
+
+      </div>
+
+      <button
+        class="primary"
+        id="share"
+      >
+        Konum Paylaşımını Aç
+      </button>
+
+      <button
+        class="danger"
+        id="stop"
+      >
+        Paylaşımı Durdur
+      </button>
+
+    </article>
+
+
+    <aside>
+
+      <article
+        class="panel"
+        id="family"
+      >
+
+        <h3>Ailem</h3>
+
+        <input
+          id="familyName"
+          placeholder="Aile adı"
+        >
+
+        <button
+          class="primary"
+          id="create"
+        >
+          Aile Oluştur
+        </button>
+
+        <hr>
+
+        <input
+          id="code"
+          placeholder="Davet kodu"
+        >
+
+        <button id="join">
+          Koda Katıl
+        </button>
+
+        <p id="familyInfo"></p>
+
+      </article>
+
+
+      <article
+        class="panel"
+        id="history"
+      >
+
+        <h3>Konum Geçmişim</h3>
+
+        <div id="historyList">
+          Henüz kayıt yok.
+        </div>
+
+      </article>
+
+    </aside>
+
+  </div>
+
+</section>
+
+</main>
+
+<div id="toast"></div>
+
+<script type="module" src="app.js"></script>
+
+</div>
+
+
+<!-- ================= AÇILIŞ ANİMASYONU ================= -->
+
+<script>
+
+const splash = document.getElementById("splash");
+const site = document.getElementById("site");
+const loadingBar = document.getElementById("loadingBar");
+
+let progress = 0;
+
+const loader = setInterval(() => {
+
+  progress += Math.random() * 8 + 3;
+
+  if (progress >= 100) {
+
+    progress = 100;
+
+    clearInterval(loader);
+
+    setTimeout(() => {
+
+      splash.classList.add("hide");
+
+      site.classList.add("show");
+
+      setTimeout(() => {
+        splash.remove();
+      }, 900);
+
+    }, 350);
+
+  }
+
+  loadingBar.style.width = progress + "%";
+
+}, 80);
+
+</script>
+
+</body>
+</html>
