@@ -747,14 +747,18 @@ async function ailemPaneliYenile() {
       'border:1px solid #30343d;border-radius:14px;';
 
     const ad = document.createElement('strong');
-    ad.textContent = uye.username || 'Aile üyesi';
+ad.textContent = uye.username || 'Aile üyesi';
 
-    const durum = document.createElement('p');
-    durum.style.color = '#a9adb8';
-    durum.textContent = uye.last_seen
-      ? 'Son konum güncellemesi: ' + uye.last_seen
-      : 'Konum bilgisi henüz mevcut değil';
+const rol = document.createElement('p');
+rol.style.color = '#66e6a2';
+rol.textContent =
+  uye.role === 'parent' ? 'Ebeveyn' : 'Aile üyesi';
 
+const durum = document.createElement('p');
+durum.style.color = '#a9adb8';
+durum.textContent = 'Konum paylaşımı henüz bağlanmadı';
+
+kart.append(ad, rol, durum);
     kart.append(ad, durum);
     liste.appendChild(kart);
   });
