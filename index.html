@@ -765,5 +765,32 @@ kart.append(ad, rol, durum);
 }
 </script>
 
+<script>
+(function () {
+  const panel = document.getElementById('ailemPanel');
+  if (!panel) return;
+
+  const menu = document.createElement('button');
+  menu.textContent = '👨‍👩‍👧‍👦 Ailem';
+  menu.style.cssText =
+    'position:fixed;right:16px;bottom:80px;z-index:9999;' +
+    'padding:14px 18px;border:0;border-radius:14px;' +
+    'background:#c92735;color:white;font-weight:bold;';
+
+  menu.onclick = function () {
+    panel.style.display = 'block';
+    panel.style.position = 'relative';
+    panel.style.zIndex = '10000';
+    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    if (typeof ailemPaneliYenile === 'function') {
+      ailemPaneliYenile();
+    }
+  };
+
+  document.body.appendChild(menu);
+})();
+</script>
+
 </body>
 </html>
