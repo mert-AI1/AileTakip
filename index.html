@@ -685,5 +685,81 @@ document.querySelectorAll(".side-nav a")
 
 </script>
 
+<!-- AİLETAKİP - AİLEM PANELİ -->
+<section id="ailemPanel" style="
+  display:none;
+  margin:20px auto;
+  padding:20px;
+  max-width:700px;
+  color:#f5f5f5;
+  background:#111318;
+  border:1px solid #30343d;
+  border-radius:20px;
+  font-family:Arial,sans-serif;
+">
+  <h2 style="margin-top:0">👨‍👩‍👧‍👦 Ailem</h2>
+  <p style="color:#a9adb8">
+    Aile üyelerin ve konum paylaşım durumları
+  </p>
+
+  <div id="ailemUyeListesi">
+    <p>Aile üyeleri yükleniyor...</p>
+  </div>
+
+  <button onclick="ailemPaneliYenile()" style="
+    width:100%;padding:13px;margin-top:15px;
+    border:0;border-radius:12px;
+    background:#c92735;color:white;font-size:15px;
+  ">↻ Listeyi yenile</button>
+</section>
+
+<script>
+async function ailemPaneliYenile() {
+  const liste = document.getElementById('ailemUyeListesi');
+
+  if (typeof supabaseClient === 'undefined') {
+    liste.textContent = 'Veritabanı bağlantısı bulunamadı.';
+    return;
+  }
+
+  liste.textContent = 'Aile üyeleri yükleniyor...';
+
+  const { data, error } =
+    await supabaseClient.rpc('get_my_family_members');
+
+  if (error) {
+    liste.textContent =
+      'Aile listesi henüz bağlanmadı. Veritabanı ayarı gerekli.';
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    liste.textContent = 'Henüz aile üyesi bulunamadı.';
+    return;
+  }
+
+  liste.replaceChildren();
+
+  data.forEach(uye => {
+    const kart = document.createElement('div');
+    kart.style.cssText =
+      'padding:14px;margin:10px 0;background:#1b1e25;' +
+      'border:1px solid #30343d;border-radius:14px;';
+
+    const ad = document.createElement('strong');
+    ad.textContent = uye.username || 'Aile üyesi';
+
+    const durum = document.createElement('p');
+    durum.style.color = '#a9adb8';
+    durum.textContent = uye.last_seen
+      ? 'Son konum güncellemesi: ' + uye.last_seen
+      : 'Konum bilgisi henüz mevcut değil';
+
+    kart.append(ad, durum);
+    liste.appendChild(kart);
+  });
+}
+</script>
+
 </body>
 </html>
